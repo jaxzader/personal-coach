@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Coach</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <nav class="sidebar">
+    <div class="brand">
+      <h1>Personal Coach</h1>
+      <span class="sub">built for you, not a template</span>
+    </div>
+
+    <div class="nav">
+      <button class="nav-item active" data-section="goals">
+        <span class="dot"></span> Goals &amp; Planner
+      </button>
+      <button class="nav-item" data-section="habits">
+        <span class="dot"></span> Habit Breaker
+      </button>
+      <button class="nav-item" data-section="health">
+        <span class="dot"></span> Health Accountability
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="today-pill" id="todayPill"></div>
+      <button class="side-btn" id="backupBtn">⭳ Backup data</button>
+      <button class="side-btn" id="restoreBtn">⭱ Restore from backup</button>
+      <input type="file" id="restoreFile" accept="application/json" style="display:none;">
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ============ GOALS + PLANNER ============ -->
+    <section class="section active" data-accent="gold" id="section-goals">
+      <div class="section-header">
+        <h2>Goals &amp; Daily Planner</h2>
+        <p>Long-range direction, and the one thing in front of you today. Built for a brain that does better with one focus task than a wall of a list.</p>
+      </div>
+
+      <div class="card accent-edge">
+        <h3>Long-Term &amp; Short-Term Goals</h3>
+        <div class="field-row cols-2">
+          <div>
+            <label class="field-label">Long-term goals</label>
+            <textarea id="goalLongTerm" placeholder="Where do you want to be in a year? Five years? Free text, no wrong format."></textarea>
+          </div>
+          <div>
+            <label class="field-label">Short-term goals</label>
+            <textarea id="goalShortTerm" placeholder="What's the next few weeks/months about?"></textarea>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <span class="hint">Saved automatically. Turning these into a real step-by-step plan needs actual reasoning — that's a Claude job, not this app's.</span>
+          <button class="btn btn-copy" id="copyGoalsBtn">📋 Copy for Claude</button>
+        </div>
+      </div>
+
+      <div class="card accent-edge">
+        <h3>Today</h3>
+        <div class="stat-row" id="plannerStatRow"></div>
+        <div class="progress-track" style="margin-bottom:20px;"><div class="progress-fill" id="plannerProgressFill" style="width:0%;"></div></div>
+
+        <div id="focusTaskSlot"></div>
+
+        <div style="margin-top:22px;">
+          <label class="field-label">Add a task</label>
+          <div style="display:flex; gap:10px;">
+            <input type="text" id="newTaskInput" placeholder="What needs to happen today?">
+            <button class="btn btn-primary" id="addTaskBtn">+ Add</button>
+          </div>
+        </div>
+
+        <div id="taskListWrap" style="margin-top:20px;"></div>
+      </div>
+
+      <div class="card accent-edge">
+        <h3>History</h3>
+        <p class="hint" style="margin-top:-8px; margin-bottom:14px;">Past days — see what got done and spot your patterns.</p>
+        <div id="plannerHistoryWrap"></div>
+      </div>
+    </section>
+
+    <!-- ============ HABIT BREAKER ============ -->
+    <section class="section" data-accent="coral" id="section-habits">
+      <div class="section-header">
+        <h2>Habit Breaker</h2>
+        <p>Real techniques, real effects, and a daily streak that holds you to it — firmly, not harshly.</p>
+      </div>
+
+      <div class="card accent-edge">
+        <h3>Add a habit to quit</h3>
+        <div class="field-row">
+          <div>
+            <label class="field-label">Habit name</label>
+            <input type="text" id="habitName" placeholder="e.g. Procrastination">
+          </div>
+          <div>
+            <label class="field-label">Category</label>
+            <select id="habitCategory"></select>
+          </div>
+          <div>
+            <label class="field-label">How often, currently</label>
+            <input type="text" id="habitFrequency" placeholder="e.g. 10-15x/day">
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label class="field-label">Description</label>
+          <textarea id="habitDescription" placeholder="Any detail worth remembering — context, triggers, history with it."></textarea>
+        </div>
+        <div id="habitCustomWrap" style="display:none; margin-bottom:14px;">
+          <label class="field-label">Describe it in your own words</label>
+          <textarea id="habitCustomDescription" placeholder="This doesn't match a pre-built category — describe it here so Claude can give you tailored techniques and effects."></textarea>
+        </div>
+        <button class="btn btn-primary" id="addHabitBtn">+ Add Habit</button>
+      </div>
+
+      <div id="habitListWrap"></div>
+    </section>
+
+    <!-- ============ HEALTH ============ -->
+    <section class="section" data-accent="jade" id="section-health">
+      <div class="section-header">
+        <h2>Daily Health Accountability</h2>
+        <p>Your own checklist, your own rules. Track it daily, build the streak, get the win when you clear the whole board.</p>
+      </div>
+
+      <div class="card accent-edge">
+        <h3>Today's Checklist</h3>
+        <div class="stat-row" id="healthStatRow"></div>
+        <div class="progress-track" style="margin-bottom:20px;"><div class="progress-fill" id="healthProgressFill" style="width:0%;"></div></div>
+        <div id="healthChecklistWrap"></div>
+
+        <div style="margin-top:20px; display:flex; gap:10px;">
+          <input type="text" id="newHealthItemInput" placeholder="Add a checklist item — e.g. Drink water">
+          <button class="btn btn-primary" id="addHealthItemBtn">+ Add</button>
+        </div>
+      </div>
+
+      <div class="card accent-edge">
+        <h3>History</h3>
+        <div id="healthHistoryWrap"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="storage.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
